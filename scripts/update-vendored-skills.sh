@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Refresh the third-party skills vendored under agents/skills/.
 # Run from the repo root, review the diff, and open a PR — merging it syncs
-# the update to every repo in .github/sync.yml.
+# the update to every opted-in repo (see scripts/discover-sync-targets.py).
 set -euo pipefail
 
 tmp="$(mktemp -d)"

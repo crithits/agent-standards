@@ -1,0 +1,28 @@
+# Template for the repo-file-sync-action config.
+# Docs: https://github.com/BetaHuhn/repo-file-sync-action
+#
+# Target repos are NOT listed here. scripts/discover-sync-targets.py finds them
+# at run time: every repo the sync App is installed on that has AGENTS.local.md
+# at its root. It replaces __REPOS__ below and writes .github/sync.generated.yml.
+# Repo names are masked in the Actions logs.
+
+group:
+  - files:
+      # Fully managed: overwritten on every sync.
+      - source: agents/AGENTS.md
+        dest: AGENTS.md
+      - source: agents/CLAUDE.md
+        dest: CLAUDE.md
+      - source: agents/skills/
+        dest: .agents/skills/
+        deleteOrphaned: true
+      - source: agents/skills/
+        dest: .claude/skills/
+        deleteOrphaned: true
+
+      # AGENTS.local.md is never synced: it's the opt-in marker and belongs to
+      # each repo. agents/AGENTS.local.md is the stub to copy into an existing
+      # repo to opt it in.
+
+    repos: |
+      __REPOS__

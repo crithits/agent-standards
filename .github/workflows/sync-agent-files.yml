@@ -1,12 +1,24 @@
 name: Sync agent files
 
+# Opens (or updates) a PR in every crithits repo that has AGENTS.local.md at its
+# root and the sync App installed. There's no repo list to maintain: repos made
+# from react-ts-template opt in automatically; delete AGENTS.local.md to opt out.
+
 on:
   push:
     branches: [main]
     paths:
       - agents/**
-      - .github/sync.yml
+      - .github/sync.template.yml
+      - .github/workflows/sync-agent-files.yml
+      - scripts/discover-sync-targets.py
+  schedule:
+    # Weekly catch-up for repos created since the last change. (Mondays 09:17 UTC)
+    - cron: "17 9 * * 1"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: sync-agent-files
@@ -18,7 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # A GitHub App token is preferred over a PAT: scoped per repo, not tied to a person.
       # App permissions needed on target repos: Contents (rw), Pull requests (rw), Metadata (r).
       - uses: actions/create-github-app-token@v2
         id: app-token
@@ -27,9 +38,19 @@ jobs:
           private-key: ${{ secrets.AGENT_SYNC_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
+      # Lists the App's repos, keeps those with AGENTS.local.md, masks every repo
+      # name in the logs, and writes .github/sync.generated.yml.
+      - name: Find repos to sync
+        id: targets
+        run: python3 scripts/discover-sync-targets.py .github/sync.template.yml .github/sync.generated.yml
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - uses: BetaHuhn/repo-file-sync-action@v1
+        if: steps.targets.outputs.count != '0'
         with:
           GH_INSTALLATION_TOKEN: ${{ steps.app-token.outputs.token }}
+          CONFIG_PATH: .github/sync.generated.yml
           GIT_EMAIL: agent-standards-sync[bot]@users.noreply.github.com
           GIT_USERNAME: agent-standards-sync[bot]
           COMMIT_PREFIX: "chore(agents):"
@@ -39,6 +60,6 @@ jobs:
           PR_BODY: |
             Automated sync of shared coding-agent rules from [agent-standards](https://github.com/${{ github.repository }}).
 
-            Updates `AGENTS.md`, `CLAUDE.md`, and the vendored skills. `AGENTS.local.md` is only created if missing and never overwritten.
+            Updates `AGENTS.md`, `CLAUDE.md`, and the vendored skills. `AGENTS.local.md` is never overwritten.
 
-            To change these rules, open a PR in agent-standards rather than editing here.
+            To change these rules, open a PR in agent-standards rather than editing here. To stop receiving these PRs, delete `AGENTS.local.md` from this repo.

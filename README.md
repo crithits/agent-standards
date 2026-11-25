@@ -7,7 +7,7 @@ Shared standards for React + TypeScript repos, built so coding agents (Claude Co
 | `packages/eslint-config-react` | `@crithits/eslint-config-react`: ESLint flat config with React Compiler rules, strict type-checked typescript-eslint, jsx-a11y | npm package (GitHub Packages) |
 | `packages/tsconfig` | `@crithits/tsconfig`: strict base + React app tsconfig | npm package (GitHub Packages) |
 | `agents/AGENTS.md`, `agents/CLAUDE.md` | Rules every agent reads | Synced by PR (overwritten) |
-| `agents/AGENTS.local.md` | Stub for repo-specific notes | Synced by PR once (never overwritten) |
+| `agents/AGENTS.local.md` | Stub for repo-specific notes; its presence opts a repo into syncing | Never synced: copy it into an existing repo to opt in |
 | `agents/skills/` | Vendored Vercel skills (react-best-practices, composition-patterns) | Synced by PR to `.agents/skills/` and `.claude/skills/` |
 
 Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills are the on-demand deep reference.
@@ -25,9 +25,13 @@ Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills 
 
 **Change a lint rule:** edit `packages/eslint-config-react/index.js`, add or adjust a fixture and assertion in `test/`, bump `version` (semver: new error-level rules are a major bump), merge. Repos pick it up through Renovate/Dependabot.
 
-**Change agent rules:** edit `agents/AGENTS.md`, merge. Every repo in `.github/sync.yml` gets a PR.
+**Change agent rules:** edit `agents/AGENTS.md`, merge. Every opted-in repo gets a PR.
 
-**Add a repo:** add it to `repos:` in `.github/sync.yml`, make sure the App is installed on it, and run the *Sync agent files* workflow manually. For an existing repo, also install the packages (below), and start with `effectRulesAsWarnings: true` if the effect rule floods it.
+**Which repos get synced:** there's no list. `scripts/discover-sync-targets.py` asks the sync App which repos it's installed on and keeps the ones with `AGENTS.local.md` at the root (archived repos and this repo are skipped). Repo names are masked in the Actions logs, so this repo can be public without revealing private or client repos. The workflow also runs weekly to catch repos created since the last change.
+
+**Add a repo:** repos created from `react-ts-template` are opted in automatically. For an existing repo, copy `agents/AGENTS.local.md` to its root and fill it in, install the packages (below), and start with `effectRulesAsWarnings: true` if the effect rule floods it. Then run *Sync agent files* manually or wait for the next run.
+
+**Remove a repo:** delete its `AGENTS.local.md`.
 
 **Update vendored skills:** `./scripts/update-vendored-skills.sh`, review the diff, merge.
 
