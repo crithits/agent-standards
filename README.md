@@ -15,14 +15,11 @@ Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills 
 ## One-time setup
 
 1. **Push** this repo to `github.com/crithits/agent-standards`.
-2. **Packages:** nothing to configure. `ci-publish.yml` publishes to GitHub Packages with the built-in `GITHUB_TOKEN` on every push to `main` (only versions not yet published).
+2. **Packages:** `ci-publish.yml` publishes to GitHub Packages with the built-in `GITHUB_TOKEN` on every push to `main` (only versions not yet published). Both packages are **public**, so CI in any repo can install them with its own `GITHUB_TOKEN` and no per-repo access grant. A package added later starts private; make it public in its *Package settings → Danger Zone → Change visibility*.
 3. **Sync bot:** create a GitHub App in the org (Settings → Developer settings → GitHub Apps) with repository permissions *Contents: read & write*, *Pull requests: read & write*, *Metadata: read*. Install it on the target repos. Then in this repo:
    - Variable `AGENT_SYNC_APP_ID` = the App ID
    - Secret `AGENT_SYNC_APP_PRIVATE_KEY` = the App's private key (.pem contents)
-4. **Bootstrap the template repo** (`crithits/react-ts-template`):
-   1. Grant it package access: org **Packages** → `eslint-config-react` and `tsconfig` → *Package settings* → *Manage Actions access* → add `react-ts-template` (Read).
-   2. In the template, run **Actions → Update lockfile → Run workflow**. It generates `pnpm-lock.yaml` against GitHub Packages, commits it, and starts CI.
-   3. Mark it as a template (repo Settings → *Template repository*).
+4. **Template repo** (`crithits/react-ts-template`): its lockfile is already committed. Mark it as a template in its repo Settings → *Template repository*.
 
 ## Day to day
 
@@ -40,7 +37,7 @@ Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills 
 ```
 @crithits:registry=https://npm.pkg.github.com
 ```
-Developers need a GitHub token with `read:packages` in `~/.npmrc` (`//npm.pkg.github.com/:_authToken=...`); CI uses `GITHUB_TOKEN`.
+GitHub Packages requires a token even for public packages. Developers need a classic token with `read:packages` in `~/.npmrc` (`//npm.pkg.github.com/:_authToken=...`); CI uses `GITHUB_TOKEN` (with `permissions: packages: read`).
 
 ```sh
 pnpm add -D @crithits/eslint-config-react @crithits/tsconfig eslint typescript@~6.0
