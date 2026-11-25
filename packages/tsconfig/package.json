@@ -1,0 +1,21 @@
+{
+  "name": "@crithits/tsconfig",
+  "version": "1.0.0",
+  "description": "Shared strict tsconfig for React + TypeScript apps",
+  "files": [
+    "base.json",
+    "react-app.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./react-app.json": "./react-app.json"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crithits/agent-standards.git",
+    "directory": "packages/tsconfig"
+  }
+}

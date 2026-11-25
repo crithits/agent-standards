@@ -1,0 +1,34 @@
+name: CI and publish
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  test-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@crithits"
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+      # On main: publish any package whose version isn't in the registry yet.
+      # To release, bump "version" in the package's package.json in your PR.
+      - name: Publish changed packages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: pnpm -r publish --no-git-checks --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
