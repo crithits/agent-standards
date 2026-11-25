@@ -1,6 +1,6 @@
 # AGENTS.local.md
 
-Repo-specific guidance for coding agents. This file is yours: the shared `AGENTS.md` is synced from `crithits/agent-standards` and overwritten, but this one never is.
+Project-specific guidance for coding agents. This file is yours: the shared `AGENTS.md` next to it is synced from `crithits/agent-standards` and overwritten, but this one never is. Its presence is what opts this folder into the sync.
 
 ## What this repo is
 

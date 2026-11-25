@@ -24,6 +24,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
+      - name: Test sync discovery script
+        run: python3 -m unittest discover -s scripts -v
 
       # On main: publish any package whose version isn't in the registry yet.
       # To release, bump "version" in the package's package.json in your PR.
