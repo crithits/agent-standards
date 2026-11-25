@@ -1,24 +1,4 @@
 [
   { "source": "agents/AGENTS.md", "dest": "AGENTS.md" },
-  { "source": "agents/CLAUDE.md", "dest": "CLAUDE.md" },
-  {
-    "source": "agents/skills/vercel-react-best-practices/",
-    "dest": ".agents/skills/vercel-react-best-practices/",
-    "deleteOrphaned": true
-  },
-  {
-    "source": "agents/skills/vercel-composition-patterns/",
-    "dest": ".agents/skills/vercel-composition-patterns/",
-    "deleteOrphaned": true
-  },
-  {
-    "source": "agents/skills/vercel-react-best-practices/",
-    "dest": ".claude/skills/vercel-react-best-practices/",
-    "deleteOrphaned": true
-  },
-  {
-    "source": "agents/skills/vercel-composition-patterns/",
-    "dest": ".claude/skills/vercel-composition-patterns/",
-    "deleteOrphaned": true
-  }
+  { "source": "agents/CLAUDE.md", "dest": "CLAUDE.md" }
 ]

@@ -8,7 +8,7 @@ Shared standards for React + TypeScript repos, built so coding agents (Claude Co
 | `packages/tsconfig` | `@crithits/tsconfig`: strict base + React app tsconfig | npm package (GitHub Packages) |
 | `agents/AGENTS.md`, `agents/CLAUDE.md` | Rules every agent reads | Synced by PR (overwritten) |
 | `agents/AGENTS.local.md` | Stub for project-specific notes; its presence opts a folder into syncing | Never synced: copy it into a repo (or a monorepo subfolder) to opt in |
-| `agents/skills/` | Vendored Vercel skills (react-best-practices, composition-patterns) | Synced by PR to `.agents/skills/<skill>/` and `.claude/skills/<skill>/` (other skills in those folders are left alone) |
+| Vercel skills (react-best-practices, composition-patterns) | Deeper React guidance for agents | Not synced. Installed once per machine; `AGENTS.md` tells agents to prompt for the install when they're missing (below) |
 
 Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills are the on-demand deep reference.
 
@@ -38,7 +38,13 @@ What gets synced is listed in `.github/sync-files.json` (paths relative to the m
 
 **Remove a repo or folder:** delete its `AGENTS.local.md`. The already-synced files stay until you delete them.
 
-**Update vendored skills:** `./scripts/update-vendored-skills.sh`, review the diff, merge.
+**Skills:** nothing to maintain here. Each developer installs them once per machine (agents prompt for it when they're missing):
+
+```sh
+npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices --skill vercel-composition-patterns -g -a claude-code -a codex -y
+```
+
+`npx skills update -g` pulls Vercel's latest. To add or swap a skill for everyone, change the list and command in `agents/AGENTS.md`.
 
 ## Using the packages in a repo
 

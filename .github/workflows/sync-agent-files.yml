@@ -62,6 +62,6 @@ jobs:
           PR_BODY: |
             Automated sync of shared coding-agent rules from [agent-standards](https://github.com/${{ github.repository }}).
 
-            Updates `AGENTS.md`, `CLAUDE.md`, and the vendored skills. `AGENTS.local.md` is yours and is never touched.
+            Updates `AGENTS.md` and `CLAUDE.md`. `AGENTS.local.md` is yours and is never touched.
 
             To change these rules, open a PR in agent-standards rather than editing here. To stop receiving these PRs, delete the `AGENTS.local.md` next to the synced `AGENTS.md`.

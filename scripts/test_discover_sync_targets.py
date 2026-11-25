@@ -137,19 +137,14 @@ class DiscoverSyncTargetsTest(unittest.TestCase):
         )
         self.assertEqual(self.gh_output.read_text(), "count=2\n")
 
-    def test_subfolder_dests_are_prefixed_and_skills_are_scoped(self) -> None:
+    def test_subfolder_dests_are_prefixed(self) -> None:
         self.api.repos = [repo("monorepo")]
         self.api.trees = {"crithits/monorepo": ["apps/web/AGENTS.local.md"]}
         self.run_script()
         files = json.loads(self.output.read_text())["group"][0]["files"]
-        dests = sorted(f["dest"] for f in files)
-        self.assertIn("apps/web/CLAUDE.md", dests)
-        self.assertIn("apps/web/.claude/skills/vercel-react-best-practices/", dests)
-        # deleteOrphaned only ever applies to a single vendored skill folder,
-        # never to a whole skills/ directory that might hold the repo's own skills.
-        for entry in files:
-            if entry.get("deleteOrphaned"):
-                self.assertRegex(entry["dest"], r"skills/vercel-[a-z-]+/$")
+        self.assertEqual(sorted(f["dest"] for f in files), ["apps/web/AGENTS.md", "apps/web/CLAUDE.md"])
+        # Nothing synced may delete files a repo owns.
+        self.assertFalse(any(f.get("deleteOrphaned") for f in files))
 
     def test_skips_archived_self_empty_and_ignored_folders(self) -> None:
         self.api.repos = [
