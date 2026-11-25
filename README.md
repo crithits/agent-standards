@@ -19,11 +19,10 @@ Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills 
 3. **Sync bot:** create a GitHub App in the org (Settings → Developer settings → GitHub Apps) with repository permissions *Contents: read & write*, *Pull requests: read & write*, *Metadata: read*. Install it on the target repos. Then in this repo:
    - Variable `AGENT_SYNC_APP_ID` = the App ID
    - Secret `AGENT_SYNC_APP_PRIVATE_KEY` = the App's private key (.pem contents)
-4. **Bootstrap the template repo** (`react-ts-template`, shipped alongside this one). Its lockfile has to be generated after the packages exist in the registry:
-   1. Wait for this repo's first *CI and publish* run to publish `1.0.0` of both packages.
-   2. In the template: `pnpm install`, then commit `pnpm-lock.yaml` and push.
-   3. Grant it package access (org **Packages** → each package → *Manage Actions access*).
-   4. Mark it as a template (repo Settings → *Template repository*).
+4. **Bootstrap the template repo** (`crithits/react-ts-template`):
+   1. Grant it package access: org **Packages** → `eslint-config-react` and `tsconfig` → *Package settings* → *Manage Actions access* → add `react-ts-template` (Read).
+   2. In the template, run **Actions → Update lockfile → Run workflow**. It generates `pnpm-lock.yaml` against GitHub Packages, commits it, and starts CI.
+   3. Mark it as a template (repo Settings → *Template repository*).
 
 ## Day to day
 
