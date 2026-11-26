@@ -46,19 +46,19 @@ If you're about to open a PR and `pr-description` is still missing, follow `http
 
 ## Effects: `useEffect` is a last resort
 
-Effects are for synchronizing with systems *outside* React. Before writing one, check this list — most effects in agent-written code fall into one of these:
+Effects are for synchronizing with systems _outside_ React. Before writing one, check this list — most effects in agent-written code fall into one of these:
 
-| If you're about to... | Do this instead |
-|---|---|
-| Compute a value from props/state | Calculate it during render. `const total = items.reduce(...)` |
-| Cache an expensive calculation | Compute during render (React Compiler memoizes); `useMemo` only if the compiler is off |
-| Reset state when a prop changes | Pass a `key` so React remounts: `<Profile key={userId} />` |
-| Adjust some state when a prop changes | Derive it, or store the ID not the object |
-| Respond to a user action (submit, click) | Put the logic in the event handler |
-| Notify a parent of a state change | Call the parent's callback in the same event handler |
-| Fetch data | Use the project's data layer (TanStack Query / router loader / RSC) — never raw `fetch` in `useEffect` |
-| Subscribe to an external store | `useSyncExternalStore` |
-| Chain effects that set state that triggers effects | Collapse into one event handler or derived values |
+| If you're about to...                              | Do this instead                                                                                        |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Compute a value from props/state                   | Calculate it during render. `const total = items.reduce(...)`                                          |
+| Cache an expensive calculation                     | Compute during render (React Compiler memoizes); `useMemo` only if the compiler is off                 |
+| Reset state when a prop changes                    | Pass a `key` so React remounts: `<Profile key={userId} />`                                             |
+| Adjust some state when a prop changes              | Derive it, or store the ID not the object                                                              |
+| Respond to a user action (submit, click)           | Put the logic in the event handler                                                                     |
+| Notify a parent of a state change                  | Call the parent's callback in the same event handler                                                   |
+| Fetch data                                         | Use the project's data layer (TanStack Query / router loader / RSC) — never raw `fetch` in `useEffect` |
+| Subscribe to an external store                     | `useSyncExternalStore`                                                                                 |
+| Chain effects that set state that triggers effects | Collapse into one event handler or derived values                                                      |
 
 Legitimate effects: DOM APIs (focus, measure, third-party widgets), subscriptions with cleanup, analytics on mount, syncing with non-React code. Every effect must have a cleanup if it subscribes, starts a timer, or opens a connection. Use `useEffectEvent` for non-reactive logic read inside an effect rather than disabling `exhaustive-deps`.
 

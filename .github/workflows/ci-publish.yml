@@ -23,6 +23,10 @@ jobs:
           scope: "@crithits"
 
       - run: pnpm install --frozen-lockfile
+      # Synced files land in repos that may run Prettier over Markdown, so keep
+      # them clean here rather than failing CI in every opted-in repo.
+      - name: Check Markdown formatting
+        run: pnpm format:check
       - run: pnpm test
       - name: Test sync discovery script
         run: python3 -m unittest discover -s scripts -v

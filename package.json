@@ -4,7 +4,9 @@
   "description": "Shared lint config, tsconfig, and coding-agent rules for React + TypeScript repos",
   "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "test": "pnpm -r test"
+    "test": "pnpm -r test",
+    "format": "prettier --write \"**/*.md\"",
+    "format:check": "prettier --check \"**/*.md\""
   },
   "pnpm": {
     "peerDependencyRules": {
@@ -12,5 +14,8 @@
         "eslint-plugin-jsx-a11y>eslint": "10"
       }
     }
+  },
+  "devDependencies": {
+    "prettier": "^3.10.1"
   }
 }
