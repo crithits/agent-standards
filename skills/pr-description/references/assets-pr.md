@@ -5,7 +5,8 @@ GitHub has no API for the drag-and-drop attachments (`user-attachments`) that pe
 ## Capture
 
 - Take the Before shot on the base branch and the After shot on this branch, with the same route, data, viewport and state, so the only difference is the change. A `git worktree` of the base keeps your working tree untouched.
-- Use whatever browser tooling you have (Playwright, a browser MCP). Crop to the area that changed; a full page is fine when the change is the layout.
+- Use whatever browser tooling you have (Playwright, a browser MCP, `google-chrome --headless=new --screenshot`). Crop to the area that changed; a full page is fine when the change is the layout.
+- Open each image and look at it before uploading: the change must be in frame and nothing clipped. Headless Chrome's viewport, for one, comes out shorter than `--window-size`.
 - Save PNGs. For an interaction, a short GIF under about 10 MB; GitHub doesn't play repo-hosted videos inline.
 - Never capture secrets, tokens, real customer data or anything else you wouldn't put in the repo. In a public repo, the images are public.
 - If you can't capture a shot (no way to run the app, missing data or account), fall back to the placeholder comment and ask the user, as the writing rules say.
@@ -43,15 +44,14 @@ Commit each image straight to `pr-assets` with the contents API, so your local c
 Path: `pr-assets/<head-branch>/<YYYYMMDD-HHMMSS>-<before|after>-<slug>.png`, with `/` in the branch name replaced by `-`.
 
 ```sh
-dir=$(mktemp -d)
-base64 < <image> | tr -d '\n' > "$dir/content.b64"
-jq -n --arg message "Add <before|after> screenshot for <head-branch>" \
-  --arg branch pr-assets --rawfile content "$dir/content.b64" \
-  '{message: $message, branch: $branch, content: $content}' > "$dir/body.json"
-gh api -X PUT "repos/{owner}/{repo}/contents/<path>" --input "$dir/body.json" --jq .commit.sha
+b64=$(mktemp)
+base64 < <image> | tr -d '\n' > "$b64"
+gh api -X PUT "repos/{owner}/{repo}/contents/<path>" \
+  -f message="Add <before|after> screenshot for <head-branch>" \
+  -f branch=pr-assets -F content=@"$b64" --jq .commit.sha
 ```
 
-The command prints the commit SHA to link to. Never force-push, rebase, merge or close the assets PR, and never delete files from it.
+The command prints the commit SHA to link to; each upload is its own commit, so each image has its own SHA. `-F content=@file` reads the base64 from the file, which keeps large images out of the command line. Never force-push, rebase, merge or close the assets PR, and never delete files from it.
 
 ## Link
 
@@ -63,6 +63,6 @@ Link to the file at the commit SHA, not the branch name, so the image stays fixe
 | ![Before: <what it shows>](https://github.com/<owner>/<repo>/blob/<sha>/<path>?raw=true) | ![After: <what it shows>](https://github.com/<owner>/<repo>/blob/<sha>/<path>?raw=true) |
 ```
 
-Use the `github.com/.../blob/<sha>/<path>?raw=true` form: it renders in private repos for anyone with access. `raw.githubusercontent.com` links don't render in private repos.
+Use the `github.com/.../blob/<sha>/<path>?raw=true` form: GitHub redirects it to the raw file, and in a private repo it works for anyone signed in with access. `raw.githubusercontent.com` links don't render in private repos.
 
 After `gh pr create` or `gh pr edit`, read the body back and check that each linked file exists at its SHA (`gh api "repos/{owner}/{repo}/contents/<path>?ref=<sha>" --jq .size`). Report the uploaded paths in chat.
