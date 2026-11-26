@@ -9,6 +9,7 @@ Shared standards for React + TypeScript repos, built so coding agents (Claude Co
 | `agents/AGENTS.md`, `agents/CLAUDE.md` | Rules every agent reads | Synced by PR (overwritten) |
 | `agents/AGENTS.local.md` | Stub for project-specific notes; its presence opts a folder into syncing | Never synced: copy it into a repo (or a monorepo subfolder) to opt in |
 | Vercel skills (react-best-practices, composition-patterns) | Deeper React guidance for agents | Not synced. Installed once per machine; `AGENTS.md` tells agents to prompt for the install when they're missing (below) |
+| `skills/pr-description` | Skill agents always use to write PR titles and descriptions (problem, solution, before/after, how to test, collapsed review notes, checklist and risks). Adapted from Kibana's [`appex-pr`](https://github.com/elastic/kibana/pull/306197) | Not synced. Installed once per machine from this repo, same prompt as the Vercel skills |
 
 Lint is the enforcement layer; AGENTS.md is the "do this instead" layer; skills are the on-demand deep reference.
 
@@ -38,13 +39,14 @@ What gets synced is listed in `.github/sync-files.json` (paths relative to the m
 
 **Remove a repo or folder:** delete its `AGENTS.local.md`. The already-synced files stay until you delete them.
 
-**Skills:** nothing to maintain here. Each developer installs them once per machine (agents prompt for it when they're missing):
+**Skills:** each developer installs them once per machine (agents prompt for it when they're missing):
 
 ```sh
 npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices --skill vercel-composition-patterns -g -a claude-code -a codex -y
+npx skills add crithits/agent-standards --skill pr-description -g -a claude-code -a codex -y
 ```
 
-`npx skills update -g` pulls Vercel's latest. To add or swap a skill for everyone, change the list and command in `agents/AGENTS.md`.
+`npx skills update -g` pulls the latest of both. The Vercel skills need nothing from us. `pr-description` lives in `skills/pr-description/` here: edit it and merge, and developers get it on their next update. `agents/AGENTS.md` makes it mandatory for every PR. To add or swap a skill for everyone, change the list and commands in `agents/AGENTS.md`.
 
 ## Using the packages in a repo
 
