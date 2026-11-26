@@ -33,8 +33,8 @@ Fixes https://github.com/<owner>/<repo>/issues/N
 
 <solution at a high level, 1-3 sentences>
 
-| Before | After |
-| --- | --- |
+| Before                       | After                        |
+| ---------------------------- | ---------------------------- |
 | <!-- screenshot or video --> | <!-- screenshot or video --> |
 
 ## How to test

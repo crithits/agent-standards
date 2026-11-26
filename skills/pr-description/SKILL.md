@@ -63,6 +63,7 @@ Use `GH_PAGER=cat` on every `gh` call.
    - what you ran and saw this session (typecheck, lint, tests, manual checks in the browser).
 
    Done when you can state the user-visible problem, the user-visible change, and how to observe it. Ask for whatever is missing instead of guessing.
+
 4. **Draft.** Read [references/conventions.md](references/conventions.md), then write the title, the body and the suggested labels following it and the rules below. In Update mode, carry over from the existing body (see "Carry over in Update mode").
 5. **Self-check** the draft against the rules below and fix every miss. Count the visible prose words; if there's a template, check that every checklist item is copied verbatim and the summary count matches the ticks; in Update mode, check that every image and video from the old body is still there.
 6. **Write** the body to a new file, `${TMPDIR:-/tmp}/pr-body-<branch>-<YYYYMMDD-HHMMSS>.md` (replace `/` in the branch name with `-`), and the title alone to the matching `pr-title-<branch>-<YYYYMMDD-HHMMSS>.txt`. Never reuse a file from another session, and never open the files in an editor or another application. Show in chat, in this order: the absolute file paths, so the user can open them in their own editor; the title (and the old title in Update mode); the body; then the labels, the checklist ticks you inferred, any test steps you inferred but didn't verify, and, in Update mode, what you dropped from the old body.
