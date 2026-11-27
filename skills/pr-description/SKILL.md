@@ -61,7 +61,7 @@ Use `GH_PAGER=cat` on every `gh` call.
    - the title convention: `gh pr list --state merged --limit 15 --json title`;
    - the files touched, for the title and labels;
    - what you ran and saw this session (typecheck, lint, tests, manual checks in the browser);
-   - for a UI change, Before and After screenshots, uploaded to the assets PR (see [references/assets-pr.md](references/assets-pr.md)). Uploading doesn't touch the PR you're describing, so do it in Update mode before approval too.
+   - for a UI change, Before and After screenshots, uploaded to the `pr-assets` branch (see [references/screenshots.md](references/screenshots.md)). Uploading doesn't touch the PR you're describing, so do it in Update mode before approval too.
 
    Done when you can state the user-visible problem, the user-visible change, and how to observe it. Ask for whatever is missing instead of guessing.
 
@@ -81,7 +81,7 @@ If your harness or the user requires an attribution footer on PR descriptions, a
 
 The old body often holds material the diff can't recreate. Keep:
 
-- every image and video (`<img>`, `<video>`, `user-attachments`, `github.com/.../assets/` and assets-PR `.../blob/<sha>/pr-assets/...` URLs), placed in the Before/After table when you can tell which is which;
+- every image and video (`<img>`, `<video>`, `user-attachments`, `github.com/.../assets/` and `pr-assets` branch `.../blob/<sha>/pr-assets/...` URLs), placed in the Before/After table when you can tell which is which;
 - checklist ticks the author made, unless the diff clearly contradicts one (say so in chat);
 - `## Release note`, `## Impact` and `## Action` sections, tightened but not dropped;
 - any concrete setup detail in the old test steps (data, accounts, env vars, feature flags);
@@ -93,7 +93,7 @@ Everything else is source material to rewrite. List what you dropped and why in 
 
 - Restate the problem in user terms in one to three sentences, using names from the UI (page, button, form, setting), not code names.
 - Describe the solution at a high level. At most one sentence of root cause, and only when it helps the reviewer.
-- For any UI change or fix, add Before and After screenshots or videos, in a two-column table when there's one of each. With no media from the user or the old body, capture the shots yourself and host them on the repo's assets PR, following [references/assets-pr.md](references/assets-pr.md). Only when you can't, insert HTML-comment placeholders that describe the shot to take (route, data, viewport or state), and in chat ask the user to add the media. Never invent evidence. With no UI change, a Before/After table of a small input or output shape can stand in when it makes the change clearer; otherwise leave the table out.
+- For any UI change or fix, add Before and After screenshots or videos, in a two-column table when there's one of each. With no media from the user or the old body, capture the shots yourself and host them on the repo's `pr-assets` branch, following [references/screenshots.md](references/screenshots.md). Only when you can't, insert HTML-comment placeholders that describe the shot to take (route, data, viewport or state), and in chat ask the user to add the media. Never invent evidence. With no UI change, a Before/After table of a small input or output shape can stand in when it makes the change clearer; otherwise leave the table out.
 - Add a visible `## Release note` section only when the repo uses release notes and the title isn't enough.
 - Keep the visible body (everything outside collapsed blocks) to roughly 150 words of prose.
 - Write plain sentences whose subject is the thing the user sees ("The legend keeps...", "When a form has..."), prose paragraphs, and only the headings from the body order in references/conventions.md. Opening with "This PR introduces...", bold-labelled bullet lists, and file trees or `diff` blocks in the summary are the tells to rewrite.

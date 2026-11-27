@@ -1,6 +1,6 @@
-# Screenshots and the assets PR
+# Screenshots and the `pr-assets` branch
 
-GitHub has no API for the drag-and-drop attachments (`user-attachments`) that people paste into PR bodies, so you can't upload a screenshot that way. Instead, each repo keeps one long-lived draft PR, the **assets PR**, whose branch holds images. You commit screenshots to that branch through the GitHub API and link them from the description by commit SHA.
+GitHub has no API for the drag-and-drop attachments (`user-attachments`) that people paste into PR bodies, so you can't upload a screenshot that way. Instead, each repo keeps one long-lived branch, `pr-assets`, that holds images. You commit screenshots to it through the GitHub API and link them from the description by commit SHA. Nothing opens a PR for it: the branch alone keeps the commits, and the images, alive.
 
 ## Capture
 
@@ -11,31 +11,24 @@ GitHub has no API for the drag-and-drop attachments (`user-attachments`) that pe
 - Never capture secrets, tokens, real customer data or anything else you wouldn't put in the repo. In a public repo, the images are public.
 - If you can't capture a shot (no way to run the app, missing data or account), fall back to the placeholder comment and ask the user, as the writing rules say.
 
-## Find or create the assets PR
+## Find or create the branch
 
-The assets PR has head branch `pr-assets`, targets the default branch, and stays open as a draft forever. Look it up on every run:
+Look it up on every run:
 
 ```sh
-GH_PAGER=cat gh pr list --head pr-assets --state open --json number,url
+GH_PAGER=cat gh api repos/{owner}/{repo}/git/ref/heads/pr-assets --jq .object.sha
 ```
 
-If there's none, ask the user once before creating it ("This repo has no assets PR yet. Create a draft PR on branch `pr-assets` to host screenshots?"). On a yes:
+A 404 means it doesn't exist yet. Ask the user once before creating it ("This repo has no `pr-assets` branch yet. Create one to host PR screenshots?"). On a yes, branch it from the default branch and add a README with the upload command below, so anyone who finds the branch knows what it's for:
 
 ```sh
 base_sha=$(gh api repos/{owner}/{repo}/git/ref/heads/<default-branch> --jq .object.sha)
 gh api repos/{owner}/{repo}/git/refs -f ref=refs/heads/pr-assets -f sha="$base_sha"
 ```
 
-Then commit a `pr-assets/README.md` with the upload command below (GitHub won't open a PR with no commits), and open it:
+The README (`pr-assets/README.md`) says, in two or three sentences, that the branch hosts screenshots linked from PR descriptions by commit SHA, and that deleting, rebasing or force-pushing it breaks those images.
 
-```sh
-gh pr create --draft --base <default-branch> --head pr-assets \
-  --title "PR assets (do not merge)" --body-file <file>
-```
-
-The body says, in two or three sentences, that the branch hosts screenshots linked from other PR descriptions, and that merging, closing it or deleting the branch breaks those images.
-
-If you can't push to the repo (you're working from a fork) or the user declines, skip this and use placeholders.
+Don't open a PR for the branch. If you can't push to the repo (you're working from a fork) or the user declines, skip this and use placeholders.
 
 ## Upload
 
@@ -51,7 +44,7 @@ gh api -X PUT "repos/{owner}/{repo}/contents/<path>" \
   -f branch=pr-assets -F content=@"$b64" --jq .commit.sha
 ```
 
-The command prints the commit SHA to link to; each upload is its own commit, so each image has its own SHA. `-F content=@file` reads the base64 from the file, which keeps large images out of the command line. Never force-push, rebase, merge or close the assets PR, and never delete files from it.
+The command prints the commit SHA to link to; each upload is its own commit, so each image has its own SHA. `-F content=@file` reads the base64 from the file, which keeps large images out of the command line. Never delete, force-push or rebase `pr-assets`, never merge it anywhere, and never delete files from it.
 
 ## Link
 
