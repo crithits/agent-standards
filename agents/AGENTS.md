@@ -29,6 +29,14 @@ These skills are installed once per machine, not in this repo. Load them when re
 - `vercel-react-best-practices` — performance: waterfalls, bundle size, re-renders. Use when writing or reviewing components or data fetching.
 - `vercel-composition-patterns` — component API design: compound components, avoiding boolean-prop sprawl.
 - `pr-description` (version 1) — titles and descriptions for pull requests. **Always** use it when you open a PR or edit a PR's title or description, including inside another workflow that opens one. Don't write a PR body without it.
+- `ponytail` — the smallest change that fully solves the task. Use it on every coding task: writing, fixing, refactoring, choosing dependencies. Where it conflicts with this file, this file wins.
+- `ponytail-review` — review a change for correctness, safety, load, tests and needless code. Use when asked to review a diff, commit or PR.
+- `ponytail-audit` — one-shot quality audit of a whole repo. Use when asked to audit the codebase or find what to delete.
+- `ponytail-debt` — lists the `shortcut:` comments `ponytail` leaves as a debt ledger. Use when asked what was deferred.
+- `unslop` — turns generic, AI-looking UI into a designed interface. Use when asked to polish, clean up or redesign a screen, or when a UI you're building shows its tells (glows, gradient text, emoji labels, uneven spacing). Keep the product's design system and components.
+- `security-audit` — security guidance and vulnerability review. Use for security questions and when reviewing code at a trust boundary (auth, input handling, secrets). Run the full audit only when asked for one.
+- `tdd` — test-first loop and what makes a test worth keeping. Use when building a feature or fixing a bug test-first. The Testing rules below still apply.
+- `diagnosing-bugs` — a diagnosis loop for hard bugs and performance regressions. Use when something is broken, throwing, failing or slow and the cause isn't obvious.
 
 **If any of them is missing from your available skills,** tell the user once, at the start of your first reply in the session, then carry on with the task (everything else in this file still applies). Give them the command for each missing skill; these install for Claude Code and Codex:
 
@@ -38,6 +46,22 @@ npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices --sk
 
 ```sh
 npx skills add crithits/agent-standards --skill pr-description -g -a claude-code -a codex -y
+```
+
+```sh
+npx skills add DietrichGebert/ponytail --skill ponytail --skill ponytail-review --skill ponytail-audit --skill ponytail-debt -g -a claude-code -a codex -y
+```
+
+```sh
+npx skills add heydamir/unslop --skill unslop -g -a claude-code -a codex -y
+```
+
+```sh
+npx skills add cloudflare/security-audit-skill --skill security-audit -g -a claude-code -a codex -y
+```
+
+```sh
+npx skills add mattpocock/skills --skill tdd --skill diagnosing-bugs -g -a claude-code -a codex -y
 ```
 
 For another agent, swap the `-a` values (e.g. `-a cursor`). Don't run them yourself unless the user asks: they install into their home directory. Skills load when a new session starts. `npx skills update -g` updates them later.
