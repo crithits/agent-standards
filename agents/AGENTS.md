@@ -22,6 +22,14 @@ Every project exposes these `package.json` scripts (use the repo's package manag
 
 **Before saying a task is done:** run `typecheck`, `lint`, and the tests touching your change. Report what you ran and whether it passed.
 
+**Before opening a PR:** after those checks pass, run `ponytail-review` on the whole branch: every change since it left the base branch, not only uncommitted work. Then:
+
+- Fix each _Must fix_ finding that's in the PR's scope, and rerun the checks.
+- List the other findings for the user; fix them only if asked.
+- If you leave a _Must fix_ finding unfixed, say so and why, and put it under _Open_ in the PR's review notes.
+
+This applies inside any workflow that opens a PR. It doesn't apply when you only edit an existing PR's title or description.
+
 ## Skills
 
 These skills are installed once per machine, not in this repo. Load them when relevant:
@@ -30,7 +38,7 @@ These skills are installed once per machine, not in this repo. Load them when re
 - `vercel-composition-patterns` — component API design: compound components, avoiding boolean-prop sprawl.
 - `pr-description` (version 1) — titles and descriptions for pull requests. **Always** use it when you open a PR or edit a PR's title or description, including inside another workflow that opens one. Don't write a PR body without it.
 - `ponytail` — the smallest change that fully solves the task. Use it on every coding task: writing, fixing, refactoring, choosing dependencies. Where it conflicts with this file, this file wins.
-- `ponytail-review` — review a change for correctness, safety, load, tests and needless code. Use when asked to review a diff, commit or PR.
+- `ponytail-review` — review a change for correctness, safety, load, tests and needless code. **Always** run it before you open a PR (see _Before opening a PR_ above), and use it when asked to review a diff, commit or PR.
 - `ponytail-audit` — one-shot quality audit of a whole repo. Use when asked to audit the codebase or find what to delete.
 - `ponytail-debt` — lists the `shortcut:` comments `ponytail` leaves as a debt ledger. Use when asked what was deferred.
 - `unslop` — turns generic, AI-looking UI into a designed interface. Use when asked to polish, clean up or redesign a screen, or when a UI you're building shows its tells (glows, gradient text, emoji labels, uneven spacing). Keep the product's design system and components.
@@ -72,7 +80,7 @@ For another agent, swap the `-a` values (e.g. `-a cursor`). Don't run them yours
 npx skills update -g
 ```
 
-If you're about to open a PR and `pr-description` is still missing, follow `https://github.com/crithits/agent-standards/blob/main/skills/pr-description/SKILL.md` instead of improvising.
+If you're about to open a PR and `pr-description` is still missing, follow `https://github.com/crithits/agent-standards/blob/main/skills/pr-description/SKILL.md` instead of improvising. If `ponytail-review` is missing, follow `https://github.com/DietrichGebert/ponytail/blob/main/skills/ponytail-review/SKILL.md` the same way.
 
 ## Effects: `useEffect` is a last resort
 
