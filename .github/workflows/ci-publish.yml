@@ -28,8 +28,20 @@ jobs:
       - name: Check Markdown formatting
         run: pnpm format:check
       - run: pnpm test
-      - name: Test sync discovery script
+      - name: Test scripts
         run: python3 -m unittest discover -s scripts -v
+      # Agents prompt people to update a skill when AGENTS.md lists a newer
+      # version than the one installed, so every skill change must raise it.
+      - name: Check skill versions
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ -n "$BASE_REF" ]; then
+            git fetch --no-tags --depth=1 origin "$BASE_REF"
+            python3 scripts/check_skill_versions.py --base FETCH_HEAD
+          else
+            python3 scripts/check_skill_versions.py
+          fi
 
       # On main: publish any package whose version isn't in the registry yet.
       # To release, bump "version" in the package's package.json in your PR.

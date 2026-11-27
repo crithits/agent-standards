@@ -28,7 +28,7 @@ These skills are installed once per machine, not in this repo. Load them when re
 
 - `vercel-react-best-practices` — performance: waterfalls, bundle size, re-renders. Use when writing or reviewing components or data fetching.
 - `vercel-composition-patterns` — component API design: compound components, avoiding boolean-prop sprawl.
-- `pr-description` — titles and descriptions for pull requests. **Always** use it when you open a PR or edit a PR's title or description, including inside another workflow that opens one. Don't write a PR body without it.
+- `pr-description` (version 1) — titles and descriptions for pull requests. **Always** use it when you open a PR or edit a PR's title or description, including inside another workflow that opens one. Don't write a PR body without it.
 
 **If any of them is missing from your available skills,** tell the user once, at the start of your first reply in the session, then carry on with the task (everything else in this file still applies). Give them the command for each missing skill; these install for Claude Code and Codex:
 
@@ -41,6 +41,12 @@ npx skills add crithits/agent-standards --skill pr-description -g -a claude-code
 ```
 
 For another agent, swap the `-a` values (e.g. `-a cursor`). Don't run them yourself unless the user asks: they install into their home directory. Skills load when a new session starts. `npx skills update -g` updates them later.
+
+**If a skill listed with a version above is out of date,** tell the user once, then use it as installed. You can only tell when you load it: compare the `Skill version:` line near its top with the version listed here. It's out of date when that line is missing or its number is lower. Give the user the update command, and say that if the skill is still out of date after it, they should run the `npx skills add` command above again:
+
+```sh
+npx skills update -g
+```
 
 If you're about to open a PR and `pr-description` is still missing, follow `https://github.com/crithits/agent-standards/blob/main/skills/pr-description/SKILL.md` instead of improvising.
 

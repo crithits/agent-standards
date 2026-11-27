@@ -5,6 +5,10 @@ description: "Writes the title and description for every pull request: problem, 
 
 # PR description
 
+Skill version: 1
+
+<!-- Raise the version with every change to this skill, and match it in agents/AGENTS.md. CI checks both. -->
+
 Every PR you open or edit gets its title and description from this skill. Don't write a PR body any other way, and don't fall back to `gh pr create --fill`.
 
 Write descriptions a reviewer with no context can digest in a minute: restate the problem from the linked issue, describe the solution at a high level, show it, and say how to test it. Put reviewer-only detail, the checklist and risks in collapsed blocks.

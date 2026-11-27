@@ -46,7 +46,7 @@ npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices --sk
 npx skills add crithits/agent-standards --skill pr-description -g -a claude-code -a codex -y
 ```
 
-`npx skills update -g` pulls the latest of both. The Vercel skills need nothing from us. `pr-description` lives in `skills/pr-description/` here: edit it and merge, and developers get it on their next update. `agents/AGENTS.md` makes it mandatory for every PR. To add or swap a skill for everyone, change the list and commands in `agents/AGENTS.md`.
+`npx skills update -g` pulls the latest of both. The Vercel skills need nothing from us. `pr-description` lives in `skills/pr-description/` here: edit it and merge, and developers get it on their next update. Every change must raise its `Skill version:` line and the matching `(version N)` in `agents/AGENTS.md`; CI fails otherwise. That number syncs to every repo with `AGENTS.md`, and agents that load an older installed copy tell the developer to update. `agents/AGENTS.md` makes it mandatory for every PR. To add or swap a skill for everyone, change the list and commands in `agents/AGENTS.md`.
 
 ## Using the packages in a repo
 
